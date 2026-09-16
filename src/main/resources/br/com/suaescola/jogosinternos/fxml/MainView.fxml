@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.com.suaescola.jogosinternos.controller.MainController"
+            styleClass="root-pane">
+
+    <top>
+        <MenuBar>
+            <menus>
+                <Menu text="Arquivo">
+                    <items>
+                        <MenuItem text="Configurações" onAction="#abrirConfiguracoes"/>
+                        <SeparatorMenuItem/>
+                        <MenuItem text="Sair" onAction="#sair"/>
+                    </items>
+                </Menu>
+                <Menu text="Cadastros">
+                    <items>
+                        <MenuItem text="Equipes" onAction="#abrirCadastroEquipes"/>
+                        <MenuItem text="Jogadores" onAction="#abrirCadastroJogadores"/>
+                        <SeparatorMenuItem/>
+                        <MenuItem text="Importação em Lote" onAction="#abrirImportacaoLote"/>
+                    </items>
+                </Menu>
+                <Menu text="Partidas">
+                    <items>
+                        <MenuItem text="Nova partida" onAction="#abrirNovaPartida"/>
+                        <MenuItem text="Histórico" onAction="#abrirHistorico"/>
+                    </items>
+                </Menu>
+                <Menu text="Relatórios">
+                    <items>
+                        <MenuItem text="Súmulas" onAction="#abrirRelatorios"/>
+                        <MenuItem text="Estatísticas" onAction="#abrirEstatisticas"/>
+                    </items>
+                </Menu>
+                <Menu text="Ajuda">
+                    <items>
+                        <MenuItem text="Sobre" onAction="#abrirSobre"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="28" styleClass="dashboard">
+            <padding>
+                <Insets top="36" bottom="36" left="36" right="36"/>
+            </padding>
+
+            <Label text="Jogos Internos Escolares" styleClass="titulo-app"/>
+            <Label text="Selecione uma opção para começar" styleClass="subtitulo-app"/>
+
+            <GridPane hgap="18" vgap="18" alignment="CENTER">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="200" prefWidth="220"/>
+                    <ColumnConstraints minWidth="200" prefWidth="220"/>
+                    <ColumnConstraints minWidth="200" prefWidth="220"/>
+                </columnConstraints>
+
+                <Button text="Nova Partida" styleClass="card-button, card-destaque"
+                        onAction="#abrirNovaPartida"
+                        GridPane.columnIndex="0" GridPane.rowIndex="0"
+                        prefWidth="220" prefHeight="110" maxWidth="Infinity"/>
+
+                <Button text="Cadastrar Equipes" styleClass="card-button"
+                        onAction="#abrirCadastroEquipes"
+                        GridPane.columnIndex="1" GridPane.rowIndex="0"
+                        prefWidth="220" prefHeight="110" maxWidth="Infinity"/>
+
+                <Button text="Cadastrar Jogadores" styleClass="card-button"
+                        onAction="#abrirCadastroJogadores"
+                        GridPane.columnIndex="2" GridPane.rowIndex="0"
+                        prefWidth="220" prefHeight="110" maxWidth="Infinity"/>
+
+                <Button text="Histórico de Partidas" styleClass="card-button"
+                        onAction="#abrirHistorico"
+                        GridPane.columnIndex="0" GridPane.rowIndex="1"
+                        prefWidth="220" prefHeight="110" maxWidth="Infinity"/>
+
+                <Button text="Relatórios e Súmulas" styleClass="card-button"
+                        onAction="#abrirRelatorios"
+                        GridPane.columnIndex="1" GridPane.rowIndex="1"
+                        prefWidth="220" prefHeight="110" maxWidth="Infinity"/>
+
+                <Button text="Estatísticas" styleClass="card-button"
+                        onAction="#abrirEstatisticas"
+                        GridPane.columnIndex="2" GridPane.rowIndex="1"
+                        prefWidth="220" prefHeight="110" maxWidth="Infinity"/>
+            </GridPane>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" styleClass="status-bar">
+            <padding>
+                <Insets top="6" bottom="6" left="12" right="12"/>
+            </padding>
+            <Label text="Jogos Internos v1.0 — pronto" styleClass="status-label"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

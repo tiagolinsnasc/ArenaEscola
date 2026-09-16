@@ -1,0 +1,174 @@
+/* ===== Paleta base =====
+   Azul principal:  #2E86AB
+   Azul escuro:     #1B3A57
+   Fundo claro:     #F4F6F8
+   Texto secund.:   #5C6B73
+*/
+
+.root-pane {
+    -fx-background-color: #F4F6F8;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.dashboard {
+    -fx-background-color: transparent;
+}
+
+.titulo-app {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1B3A57;
+}
+
+.subtitulo-app {
+    -fx-font-size: 14px;
+    -fx-text-fill: #5C6B73;
+}
+
+/* ===== Cartões do dashboard ===== */
+
+.card-button {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #DCE3E8;
+    -fx-border-width: 1;
+    -fx-font-size: 14px;
+    -fx-text-fill: #1B3A57;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);
+}
+
+.card-button:hover {
+    -fx-background-color: #EAF2FB;
+    -fx-border-color: #3E7CB1;
+}
+
+.card-button:pressed {
+    -fx-background-color: #DCEAF7;
+}
+
+.card-destaque {
+    -fx-background-color: #2E86AB;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-color: transparent;
+}
+
+.card-destaque:hover {
+    -fx-background-color: #256A8C;
+}
+
+/* ===== Menu ===== */
+
+.menu-bar {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #DCE3E8;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* ===== Barra de status ===== */
+
+.status-bar {
+    -fx-background-color: #1B3A57;
+}
+
+.status-label {
+    -fx-text-fill: #D7E4EE;
+    -fx-font-size: 11px;
+}
+
+/* ===== Telas de cadastro (equipes, jogadores) ===== */
+
+.painel-lista {
+    -fx-background-color: white;
+    -fx-border-color: #DCE3E8;
+    -fx-border-width: 0 1 0 0;
+}
+
+.painel-formulario {
+    -fx-background-color: #F4F6F8;
+}
+
+.titulo-secao {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1B3A57;
+}
+
+.texto-auxiliar {
+    -fx-font-size: 11px;
+    -fx-text-fill: #5C6B73;
+}
+
+.botao-perigo {
+    -fx-background-color: #D64545;
+    -fx-text-fill: white;
+    -fx-background-radius: 6;
+}
+
+.botao-perigo:hover {
+    -fx-background-color: #B93A3A;
+}
+
+/* ===== Tela de placar ===== */
+
+.placar-grande {
+    -fx-font-size: 64px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1B3A57;
+}
+
+.cronometro {
+    -fx-font-size: 24px;
+    -fx-font-family: "Consolas", "Monospace";
+    -fx-font-weight: bold;
+    -fx-text-fill: #1B3A57;
+}
+
+/* ===== Tela pública (telão) ===== */
+
+.tela-publica-fundo {
+    -fx-background-color: #0B1F33;
+}
+
+.tp-periodo {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #9FC4E0;
+}
+
+.tp-nome-equipe {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.tp-placar {
+    -fx-font-size: 150px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.tp-tempo {
+    -fx-font-size: 46px;
+    -fx-font-family: "Consolas", "Monospace";
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFD166;
+}
+
+.tp-eventos-painel {
+    -fx-background-color: #112A44;
+}
+
+.tp-eventos-lista {
+    -fx-background-color: transparent;
+    -fx-control-inner-background: #112A44;
+}
+
+.tp-eventos-lista .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-alignment: CENTER;
+}

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.com.suaescola.jogosinternos.controller.EstatisticasController"
+            styleClass="root-pane" prefWidth="820" prefHeight="560">
+
+    <top>
+        <VBox spacing="8" styleClass="painel-formulario">
+            <padding>
+                <Insets top="16" bottom="12" left="16" right="16"/>
+            </padding>
+            <Label text="Estatísticas Consolidadas" styleClass="titulo-secao"/>
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Modalidade:"/>
+                <ComboBox fx:id="comboModalidade" prefWidth="200"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <HBox spacing="16">
+            <padding>
+                <Insets top="14" bottom="14" left="16" right="16"/>
+            </padding>
+
+            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                <Label text="Maiores pontuadores / goleadores" styleClass="titulo-secao"/>
+                <TableView fx:id="tabelaPontuadores" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colPontuadorJogador" text="Jogador" prefWidth="150"/>
+                        <TableColumn fx:id="colPontuadorEquipe" text="Equipe" prefWidth="130"/>
+                        <TableColumn fx:id="colPontuadorQuantidade" text="Gols/Pontos" prefWidth="90"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                <Label text="Cartões" styleClass="titulo-secao"/>
+                <TableView fx:id="tabelaCartoes" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colCartaoJogador" text="Jogador" prefWidth="150"/>
+                        <TableColumn fx:id="colCartaoEquipe" text="Equipe" prefWidth="110"/>
+                        <TableColumn fx:id="colCartaoAmarelos" text="Amarelos" prefWidth="70"/>
+                        <TableColumn fx:id="colCartaoVermelhos" text="Vermelhos" prefWidth="70"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </HBox>
+    </center>
+
+    <bottom>
+        <Label text="Entradas/saídas (substituições) ainda não são registradas pelo sistema -- não entram nesta tela."
+               styleClass="texto-auxiliar" wrapText="true">
+            <padding>
+                <Insets top="4" bottom="12" left="16" right="16"/>
+            </padding>
+        </Label>
+    </bottom>
+
+</BorderPane>

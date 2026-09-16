@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.com.suaescola.jogosinternos.controller.CadastroJogadoresController"
+            styleClass="root-pane" prefWidth="880" prefHeight="540">
+
+    <left>
+        <VBox spacing="10" styleClass="painel-lista" prefWidth="400">
+            <padding>
+                <Insets top="16" bottom="16" left="16" right="16"/>
+            </padding>
+
+            <Label text="Equipe" styleClass="texto-auxiliar"/>
+            <ComboBox fx:id="comboEquipeFiltro" prefWidth="260"/>
+            <Label fx:id="labelModalidadeFiltro" styleClass="texto-auxiliar"/>
+
+            <Label text="Jogadores da equipe" styleClass="titulo-secao"/>
+
+            <TableView fx:id="tabelaJogadores" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colNumero" text="Nº" prefWidth="50"/>
+                    <TableColumn fx:id="colNome" text="Nome" prefWidth="200"/>
+                    <TableColumn fx:id="colPosicao" text="Posição" prefWidth="100"/>
+                </columns>
+            </TableView>
+
+            <HBox spacing="10">
+                <Button text="Novo Jogador" onAction="#onNovo"/>
+                <Button text="Excluir" onAction="#onExcluir" styleClass="botao-perigo"/>
+            </HBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="12" alignment="TOP_CENTER" styleClass="painel-formulario">
+            <padding>
+                <Insets top="24" bottom="24" left="24" right="24"/>
+            </padding>
+
+            <Label text="Dados do jogador" styleClass="titulo-secao"/>
+
+            <ImageView fx:id="previewFoto" fitWidth="88" fitHeight="88" preserveRatio="true"/>
+            <Button text="Escolher foto..." onAction="#onEscolherFoto"/>
+            <Label fx:id="labelFoto" text="Nenhuma foto selecionada" styleClass="texto-auxiliar"/>
+
+            <Label text="Nome do jogador"/>
+            <TextField fx:id="campoNome" promptText="Ex.: Maria Silva" maxWidth="260"/>
+
+            <Label text="Número da camisa"/>
+            <TextField fx:id="campoNumero" promptText="Ex.: 10" maxWidth="120"/>
+
+            <Label text="Posição (opcional)"/>
+            <TextField fx:id="campoPosicao" promptText="Ex.: Goleiro, Levantador..." maxWidth="200"/>
+
+            <Label text="Equipe"/>
+            <ComboBox fx:id="comboEquipeFormulario" prefWidth="200"/>
+            <Label fx:id="labelModalidadeFormulario" styleClass="texto-auxiliar"/>
+
+            <Button text="Salvar" onAction="#onSalvar" styleClass="card-button, card-destaque" prefWidth="160"/>
+        </VBox>
+    </center>
+
+</BorderPane>
