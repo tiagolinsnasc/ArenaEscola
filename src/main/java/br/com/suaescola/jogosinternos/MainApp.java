@@ -15,6 +15,7 @@ import javafx.stage.Stage;
  * Carrega a tela principal (MainView.fxml) dentro de uma unica Stage.
  * As telas de placar (futsal/volei) e a tela publica para o telao serao
  * abertas a partir daqui, cada uma em sua propria Stage, mais adiante.
+ * TODO: Alterar CSS
  */
 public class MainApp extends Application {
 
