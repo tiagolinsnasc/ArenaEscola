@@ -120,7 +120,7 @@
 
 </BorderPane>
 
-    <ImageView fx:id="logoEscola" fitWidth="60" fitHeight="60" preserveRatio="true"
+    <ImageView fx:id="logoEscola" fitWidth="200" fitHeight="90" preserveRatio="true"
                StackPane.alignment="TOP_RIGHT">
         <StackPane.margin>
             <Insets top="46" right="16"/>
