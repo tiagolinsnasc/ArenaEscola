@@ -1,12 +1,14 @@
 package br.com.suaescola.jogosinternos;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -15,7 +17,6 @@ import javafx.stage.Stage;
  * Carrega a tela principal (MainView.fxml) dentro de uma unica Stage.
  * As telas de placar (futsal/volei) e a tela publica para o telao serao
  * abertas a partir daqui, cada uma em sua propria Stage, mais adiante.
- * TODO: Alterar CSS
  */
 public class MainApp extends Application {
 
@@ -23,6 +24,12 @@ public class MainApp extends Application {
             "/br/com/suaescola/jogosinternos/fxml/MainView.fxml";
     private static final String CSS_PRINCIPAL =
             "/br/com/suaescola/jogosinternos/css/style.css";
+
+    // Ícone FIXO do aplicativo (não muda por escola) -- fica empacotado dentro
+    // do .jar, em src/main/resources/br/com/suaescola/jogosinternos/images/.
+    // Coloque o arquivo icone-app.png nessa pasta antes de rodar/empacotar.
+    private static final String ICONE_APP =
+            "/icone.png";
 
     @Override
     public void start(Stage stagePrincipal) throws IOException {
@@ -37,7 +44,16 @@ public class MainApp extends Application {
                 Objects.requireNonNull(getClass().getResource(CSS_PRINCIPAL),
                         "CSS principal nao encontrado: " + CSS_PRINCIPAL).toExternalForm());
 
-        stagePrincipal.setTitle("Jogos Internos - Gestao de Partidas");
+        // getResourceAsStream lê de DENTRO do jar (classpath) -- certo para um
+        // ícone fixo do software. Se o arquivo ainda não foi colocado na pasta
+        // de recursos, apenas não define o ícone (não quebra o programa).
+        try (InputStream fluxoIcone = getClass().getResourceAsStream(ICONE_APP)) {
+            if (fluxoIcone != null) {
+                stagePrincipal.getIcons().add(new Image(fluxoIcone));
+            }
+        }
+
+        stagePrincipal.setTitle("Jogos Internos - Gestao de Partidas - Arena Escola");
         stagePrincipal.setScene(scene);
         stagePrincipal.setMinWidth(900);
         stagePrincipal.setMinHeight(600);

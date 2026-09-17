@@ -3,22 +3,31 @@ package br.com.suaescola.jogosinternos.controller;
 import java.io.IOException;
 import java.util.Objects;
 
+import br.com.suaescola.jogosinternos.util.LogotipoUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 /**
- * Controller da tela inicial (dashboard). Telas ainda não implementadas
- * mostram um aviso de "em construcao"; as demais abrem em uma nova janela.
+ * Controller da tela inicial (dashboard).
  */
 public class MainController {
 
     private static final String CSS_PRINCIPAL =
             "/br/com/suaescola/jogosinternos/css/style.css";
+
+    @FXML
+    private ImageView logoEscola;
+
+    @FXML
+    private void initialize() {
+        logoEscola.setImage(LogotipoUtil.carregarLogotipoEscola());
+    }
 
     @FXML
     private void abrirCadastroEquipes() {
@@ -99,14 +108,6 @@ public class MainController {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
-    }
-
-    private void emConstrucao(String tela) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Em construcao");
-        alert.setHeaderText(tela);
-        alert.setContentText("Esta tela sera implementada na proxima etapa.");
-        alert.showAndWait();
     }
 }
 

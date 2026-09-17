@@ -56,6 +56,20 @@ src/main/resources/br/com/suaescola/jogosinternos/
 Pacotes que ainda serão adicionados nas próximas etapas: `model`, `dao`,
 `service` e `report`.
 
+## Ícone do aplicativo
+
+Diferente do logotipo da escola (que fica em `dados/`, pois muda de
+instalação para instalação), o ícone do próprio aplicativo é fixo e fica
+empacotado dentro do `.jar`. Para definir/trocar esse ícone, coloque um
+arquivo `icone-app.png` em:
+
+```
+src/main/resources/br/com/suaescola/jogosinternos/images/icone-app.png
+```
+
+e reconstrua o projeto. Se o arquivo não existir, o programa continua
+funcionando normalmente, só usa o ícone padrão do Java/JavaFX.
+
 ## Onde os dados ficam salvos
 
 O aplicativo cria uma pasta `dados/` ao lado de onde ele é executado

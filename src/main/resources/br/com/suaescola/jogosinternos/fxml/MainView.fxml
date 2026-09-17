@@ -7,16 +7,19 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="br.com.suaescola.jogosinternos.controller.MainController"
-            styleClass="root-pane">
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="br.com.suaescola.jogosinternos.controller.MainController">
+
+<BorderPane styleClass="root-pane">
 
     <top>
         <MenuBar>
@@ -111,8 +114,17 @@
             <padding>
                 <Insets top="6" bottom="6" left="12" right="12"/>
             </padding>
-            <Label text="Jogos Internos v1.0 — pronto" styleClass="status-label"/>
+            <Label text="Jogos Internos v1.1 " styleClass="status-label"/>
         </HBox>
     </bottom>
 
 </BorderPane>
+
+    <ImageView fx:id="logoEscola" fitWidth="60" fitHeight="60" preserveRatio="true"
+               StackPane.alignment="TOP_RIGHT">
+        <StackPane.margin>
+            <Insets top="46" right="16"/>
+        </StackPane.margin>
+    </ImageView>
+
+</StackPane>

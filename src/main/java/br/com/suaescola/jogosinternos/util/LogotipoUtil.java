@@ -22,8 +22,12 @@ public final class LogotipoUtil {
 
     /** Retorna a imagem do logotipo, ou null se nenhum arquivo correspondente for encontrado. */
     public static Image carregarLogotipoEscola() {
+        return carregarImagem(NOME_BASE);
+    }
+
+    private static Image carregarImagem(String nomeBase) {
         for (String extensao : EXTENSOES) {
-            File arquivo = PastaDadosUtil.pastaDados().resolve(NOME_BASE + "." + extensao).toFile();
+            File arquivo = PastaDadosUtil.pastaDados().resolve(nomeBase + "." + extensao).toFile();
             if (arquivo.exists()) {
                 return new Image(arquivo.toURI().toString());
             }
