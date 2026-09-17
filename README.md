@@ -90,7 +90,4 @@ arquivo `logo-escola.png` (ou `.jpg`/`.jpeg`) dentro dessa pasta `dados/`.
 
 ## Estado atual
 
-A tela inicial já funciona: menu no topo e um painel com atalhos para as
-principais funções. Cada atalho hoje só mostra um aviso "em construção" —
-as telas reais (cadastro de equipes, jogadores, placar, relatórios) serão
-implementadas nas próximas etapas.
+Finalizado, mas ainda requer testes para descobrir possíveis bugs ou pontos de melhorias.
