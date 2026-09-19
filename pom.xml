@@ -17,7 +17,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
         <javafx.version>21.0.4</javafx.version>
-        <mainClass>br.com.suaescola.jogosinternos.MainApp</mainClass>
+        <mainClass>br.com.suaescola.jogosinternos.Launcher</mainClass>
     </properties>
 
     <dependencies>
@@ -109,7 +109,7 @@
             <configuration>
                 <archive>
                     <manifest>
-                        <mainClass>br.com.suaescola.jogosinternos.MainApp</mainClass>
+                        <mainClass>br.com.suaescola.jogosinternos.Launcher</mainClass>
                     </manifest>
                 </archive>
                 <descriptorRefs>

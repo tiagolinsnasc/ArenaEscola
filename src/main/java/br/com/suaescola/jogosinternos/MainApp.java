@@ -44,7 +44,7 @@ public class MainApp extends Application {
                 Objects.requireNonNull(getClass().getResource(CSS_PRINCIPAL),
                         "CSS principal nao encontrado: " + CSS_PRINCIPAL).toExternalForm());
 
-        // getResourceAsStream lê de DENTRO do jar (classpath) -- certo para um
+        // getResourceAsStream lê de DENTRO do jar (classpath) -- certo paraum
         // ícone fixo do software. Se o arquivo ainda não foi colocado na pasta
         // de recursos, apenas não define o ícone (não quebra o programa).
         try (InputStream fluxoIcone = getClass().getResourceAsStream(ICONE_APP)) {
