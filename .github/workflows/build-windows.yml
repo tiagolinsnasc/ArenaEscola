@@ -8,16 +8,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
-
-      # --------------------------------------------------
-      # 1. Baixar o projeto
-      # --------------------------------------------------
       - name: Baixar código
         uses: actions/checkout@v6
 
-      # --------------------------------------------------
-      # 2. Java 21
-      # --------------------------------------------------
       - name: Configurar Java 21
         uses: actions/setup-java@v5
         with:
@@ -25,78 +18,43 @@ jobs:
           java-version: '21'
           cache: maven
 
-      # --------------------------------------------------
-      # 3. Verificar ambiente
-      # --------------------------------------------------
       - name: Verificar Java
         run: java -version
 
       - name: Verificar Maven
         run: mvn -version
 
-      # --------------------------------------------------
-      # 4. Compilar
-      # --------------------------------------------------
       - name: Compilar projeto
         run: mvn clean package
 
-      # --------------------------------------------------
-      # 5. Copiar dependências
-      # --------------------------------------------------
       - name: Copiar dependências
         run: |
           mvn dependency:copy-dependencies `
             -DoutputDirectory=target/lib `
             -DincludeScope=runtime
 
-      # --------------------------------------------------
-      # 6. Preparar estrutura do aplicativo
-      # --------------------------------------------------
-      - name: Preparar aplicativo
-        shell: pwsh
+      - name: Criar aplicativo com jpackage
         run: |
-          New-Item -ItemType Directory -Force -Path "target/app" | Out-Null
+          mkdir target\app
 
-          Copy-Item `
-            "target/jogos-internos.jar" `
-            "target/app/jogos-internos.jar"
+          copy target\jogos-internos.jar target\app\
 
-          Copy-Item `
-            "target/lib" `
-            "target/app/lib" `
-            -Recurse `
-            -Force
-
-      # --------------------------------------------------
-      # 7. Criar aplicativo Windows
-      # --------------------------------------------------
-      - name: Criar aplicativo Windows
-        shell: pwsh
-        run: |
           jpackage `
             --type app-image `
             --name "Jogos Internos" `
             --app-version 1.0.0 `
-            --input "target/app" `
-            --main-jar "jogos-internos.jar" `
-            --main-class "br.com.suaescola.jogosinternos.MainApp" `
-            --dest "target/package" `
-            --vendor "Sua Escola"
+            --input target\app `
+            --main-jar jogos-internos.jar `
+            --main-class br.com.suaescola.jogosinternos.Launcher `
+            --dest target\package
 
-      # --------------------------------------------------
-      # 8. Compactar
-      # --------------------------------------------------
-      - name: Criar ZIP
-        shell: pwsh
+      - name: Compactar aplicativo
         run: |
           Compress-Archive `
-            -Path "target/package/Jogos Internos" `
-            -DestinationPath "target/Jogos-Internos-Windows.zip"
+            -Path "target\package\Jogos Internos" `
+            -DestinationPath "target\Jogos-Internos-Windows.zip"
 
-      # --------------------------------------------------
-      # 9. Disponibilizar para download
-      # --------------------------------------------------
-      - name: Upload do aplicativo
+      - name: Disponibilizar aplicativo
         uses: actions/upload-artifact@v5
         with:
           name: Jogos-Internos-Windows
