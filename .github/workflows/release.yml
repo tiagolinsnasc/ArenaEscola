@@ -16,7 +16,6 @@ jobs:
     - name: Checkout do código
       uses: actions/checkout@v4
 
-    # Configuração atualizada para o Java 21
     - name: Configurar o JDK Java
       uses: actions/setup-java@v4
       with:
@@ -34,4 +33,4 @@ jobs:
         name: Release ${{ github.ref_name }}
         draft: false
         prerelease: false
-        files: target/*-with-dependencies.jar
+        files: target/*-shaded.jar
