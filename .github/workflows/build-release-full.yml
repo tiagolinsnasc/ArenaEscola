@@ -1,0 +1,235 @@
+name: Build e Release - Jogos Internos
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+
+  # ============================================================
+  # WINDOWS
+  # ============================================================
+
+  build-windows:
+
+    name: Windows - MSI
+
+    runs-on: windows-latest
+
+    steps:
+
+      - name: Baixar código
+        uses: actions/checkout@v6
+
+      - name: Configurar JDK 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Verificar Java
+        run: |
+          java -version
+          mvn -version
+          jpackage --version
+
+      - name: Compilar projeto
+        run: mvn clean package -DskipTests
+
+      - name: Criar diretório de empacotamento
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path target\jpackage-input
+
+      - name: Copiar dependências
+        run: |
+          mvn dependency:copy-dependencies `
+            -DincludeScope=runtime `
+            -DoutputDirectory=target/jpackage-input
+
+      - name: Copiar JAR da aplicação
+        shell: pwsh
+        run: |
+          Copy-Item target\jogos-internos.jar target\jpackage-input\
+
+      - name: Verificar arquivos para o pacote
+        shell: pwsh
+        run: |
+          Get-ChildItem target\jpackage-input
+
+      - name: Criar instalador MSI
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path target\installer
+
+          jpackage `
+            --type msi `
+            --name "Jogos Internos" `
+            --app-version "1.0.0" `
+            --input target\jpackage-input `
+            --main-jar jogos-internos.jar `
+            --main-class br.com.suaescola.jogosinternos.Launcher `
+            --dest target\installer `
+            --vendor "Sua Escola" `
+            --description "Sistema de gerenciamento de jogos internos" `
+            --win-menu `
+            --win-menu-group "Jogos Internos" `
+            --win-shortcut `
+            --win-dir-chooser
+
+      - name: Renomear instalador
+        shell: pwsh
+        run: |
+          $arquivo = Get-ChildItem target\installer\*.msi | Select-Object -First 1
+
+          if (-not $arquivo) {
+            Write-Error "Instalador MSI não foi encontrado."
+            exit 1
+          }
+
+          Rename-Item `
+            $arquivo.FullName `
+            "Jogos-Internos-Windows-${{ github.ref_name }}.msi"
+
+      - name: Publicar pacote Windows
+        uses: actions/upload-artifact@v7
+        with:
+          name: Jogos-Internos-Windows
+          path: target/installer/*.msi
+          if-no-files-found: error
+
+
+  # ============================================================
+  # LINUX
+  # ============================================================
+
+  build-linux:
+
+    name: Linux - DEB
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Baixar código
+        uses: actions/checkout@v6
+
+      - name: Configurar JDK 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Verificar Java
+        run: |
+          java -version
+          mvn -version
+          jpackage --version
+
+      - name: Compilar projeto
+        run: mvn clean package -DskipTests
+
+      - name: Criar diretório de empacotamento
+        run: |
+          mkdir -p target/jpackage-input
+          mkdir -p target/installer
+
+      - name: Copiar dependências
+        run: |
+          mvn dependency:copy-dependencies \
+            -DincludeScope=runtime \
+            -DoutputDirectory=target/jpackage-input
+
+      - name: Copiar JAR da aplicação
+        run: |
+          cp target/jogos-internos.jar target/jpackage-input/
+
+      - name: Verificar arquivos para o pacote
+        run: |
+          ls -lh target/jpackage-input
+
+      - name: Criar pacote DEB
+        run: |
+          jpackage \
+            --type deb \
+            --name "jogos-internos" \
+            --app-version "1.0.0" \
+            --input target/jpackage-input \
+            --main-jar jogos-internos.jar \
+            --main-class br.com.suaescola.jogosinternos.Launcher \
+            --dest target/installer \
+            --vendor "Sua Escola" \
+            --description "Sistema de gerenciamento de jogos internos" \
+            --linux-menu-group "Education" \
+            --linux-shortcut
+
+      - name: Renomear pacote
+        run: |
+          arquivo=$(find target/installer -name "*.deb" | head -n 1)
+
+          if [ -z "$arquivo" ]; then
+            echo "Pacote DEB não foi encontrado."
+            exit 1
+          fi
+
+          mv "$arquivo" \
+            "target/installer/Jogos-Internos-Linux-${{ github.ref_name }}.deb"
+
+      - name: Publicar pacote Linux
+        uses: actions/upload-artifact@v7
+        with:
+          name: Jogos-Internos-Linux
+          path: target/installer/*.deb
+          if-no-files-found: error
+
+
+  # ============================================================
+  # GITHUB RELEASE
+  # ============================================================
+
+  release:
+
+    name: Criar GitHub Release
+
+    runs-on: ubuntu-latest
+
+    needs:
+      - build-windows
+      - build-linux
+
+    steps:
+
+      - name: Baixar pacote Windows
+        uses: actions/download-artifact@v7
+        with:
+          name: Jogos-Internos-Windows
+          path: release
+
+      - name: Baixar pacote Linux
+        uses: actions/download-artifact@v7
+        with:
+          name: Jogos-Internos-Linux
+          path: release
+
+      - name: Verificar arquivos
+        run: |
+          echo "Arquivos da Release:"
+          ls -lh release
+
+      - name: Criar GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "Jogos Internos ${{ github.ref_name }}"
+          generate_release_notes: true
+          files: |
+            release/*.msi
+            release/*.deb
