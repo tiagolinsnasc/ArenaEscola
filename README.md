@@ -56,6 +56,42 @@ src/main/resources/br/com/suaescola/jogosinternos/
 Pacotes que ainda serão adicionados nas próximas etapas: `model`, `dao`,
 `service` e `report`.
 
+## Gerando um pacote pronto para rodar no Windows (sem instalar Java, sem precisar de um Windows)
+
+O `jpackage` (a ferramenta que gera o `.exe` com o runtime Java embutido)
+só funciona rodando no mesmo sistema operacional do pacote final -- ou
+seja, teria que rodar num Windows de verdade. Como você não tem uma
+máquina Windows, a solução é usar o **GitHub Actions**: o GitHub te
+empresta, de graça, uma máquina Windows na nuvem só pra rodar esse build.
+Já deixei um workflow pronto em `.github/workflows/build-windows.yml`.
+
+### Passo a passo
+
+1. Crie uma conta gratuita em [github.com](https://github.com), se ainda não tiver.
+2. Crie um repositório novo (pode ser privado) e suba este projeto nele
+   (pelo Eclipse: botão direito no projeto > Team > Share Project > Git,
+   ou usando o GitHub Desktop, que tem interface gráfica e não exige
+   linha de comando).
+3. No repositório, no GitHub, vá na aba **Actions**.
+4. Clique no workflow **"Build Windows Package"** na lista à esquerda.
+5. Clique no botão **"Run workflow"** (canto direito) > **Run workflow**
+   de novo para confirmar.
+6. Aguarde alguns minutos (aparece uma bolinha amarela girando, depois
+   um check verde quando terminar).
+7. Clique na execução concluída > role até **Artifacts**, no fim da
+   página > baixe **JogosInternos-Windows** (vem como um `.zip`).
+8. Dentro do zip está a pasta `JogosInternos/` com o `JogosInternos.exe`
+   já pronto -- é isso que você distribui. Quem for rodar não precisa
+   instalar Java nem JavaFX.
+
+Cada vez que quiser gerar uma versão nova (depois de alguma mudança),
+suba o código atualizado pro GitHub e repita os passos 4 a 8.
+
+**Sobre o ícone:** como no passo anterior, o `pom.xml` espera um arquivo
+`icone-app.ico` (formato Windows, não `.png`) na raiz do projeto. Se
+esse arquivo não existir, o jpackage usa um ícone padrão -- não trava o
+build, só fica sem o ícone customizado.
+
 ## Ícone do aplicativo
 
 Diferente do logotipo da escola (que fica em `dados/`, pois muda de
@@ -69,6 +105,11 @@ src/main/resources/br/com/suaescola/jogosinternos/images/icone-app.png
 
 e reconstrua o projeto. Se o arquivo não existir, o programa continua
 funcionando normalmente, só usa o ícone padrão do Java/JavaFX.
+
+Regra geral: tudo que está dentro de `src/main/resources` vira a raiz
+do classpath. Então `src/main/resources/icone-app.png` é chamado no
+código como `/icone-app.png`; se estivesse em
+`src/main/resources/images/icone-app.png`, seria `/images/icone-app.png`.
 
 ## Onde os dados ficam salvos
 
@@ -90,4 +131,7 @@ arquivo `logo-escola.png` (ou `.jpg`/`.jpeg`) dentro dessa pasta `dados/`.
 
 ## Estado atual
 
-Finalizado, mas ainda requer testes para descobrir possíveis bugs ou pontos de melhorias.
+A tela inicial já funciona: menu no topo e um painel com atalhos para as
+principais funções. Cada atalho hoje só mostra um aviso "em construção" —
+as telas reais (cadastro de equipes, jogadores, placar, relatórios) serão
+implementadas nas próximas etapas.

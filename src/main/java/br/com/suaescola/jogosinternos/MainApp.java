@@ -26,10 +26,9 @@ public class MainApp extends Application {
             "/br/com/suaescola/jogosinternos/css/style.css";
 
     // Ícone FIXO do aplicativo (não muda por escola) -- fica empacotado dentro
-    // do .jar, em src/main/resources/br/com/suaescola/jogosinternos/images/.
-    // Coloque o arquivo icone-app.png nessa pasta antes de rodar/empacotar.
-    private static final String ICONE_APP =
-            "/icone.png";
+    // do .jar. Colocado direto em src/main/resources/icone-app.png, então o
+    // caminho no classpath é a raiz: "/icone-app.png".
+    private static final String ICONE_APP = "/icone-app.png";
 
     @Override
     public void start(Stage stagePrincipal) throws IOException {
@@ -44,7 +43,7 @@ public class MainApp extends Application {
                 Objects.requireNonNull(getClass().getResource(CSS_PRINCIPAL),
                         "CSS principal nao encontrado: " + CSS_PRINCIPAL).toExternalForm());
 
-        // getResourceAsStream lê de DENTRO do jar (classpath) -- certo paraum
+        // getResourceAsStream lê de DENTRO do jar (classpath) -- certo para um
         // ícone fixo do software. Se o arquivo ainda não foi colocado na pasta
         // de recursos, apenas não define o ícone (não quebra o programa).
         try (InputStream fluxoIcone = getClass().getResourceAsStream(ICONE_APP)) {

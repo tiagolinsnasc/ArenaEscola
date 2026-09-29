@@ -70,8 +70,7 @@ public class HistoricoPartidasController {
         colPlacar.setCellValueFactory(dados -> new SimpleStringProperty(
                 dados.getValue().getPlacarA() + " x " + dados.getValue().getPlacarB()));
         colEquipeB.setCellValueFactory(dados -> new SimpleStringProperty(nomeEquipe(dados.getValue().getEquipeBId())));
-        colStatus.setCellValueFactory(dados -> new SimpleStringProperty(
-                dados.getValue().getStatus() == StatusPartida.ENCERRADA ? "Encerrada" : "Em andamento"));
+        colStatus.setCellValueFactory(dados -> new SimpleStringProperty(textoStatus(dados.getValue().getStatus())));
 
         tabelaPartidas.setItems(partidas);
         carregar();
@@ -92,6 +91,14 @@ public class HistoricoPartidasController {
 
     private String textoModalidade(Modalidade modalidade) {
         return modalidade == Modalidade.FUTSAL ? "Futsal" : "Vôlei";
+    }
+
+    private String textoStatus(StatusPartida status) {
+        return switch (status) {
+            case ENCERRADA -> "Encerrada";
+            case ENCERRADA_WO -> "Encerrada (WO)";
+            case EM_ANDAMENTO -> "Em andamento";
+        };
     }
 
     @FXML

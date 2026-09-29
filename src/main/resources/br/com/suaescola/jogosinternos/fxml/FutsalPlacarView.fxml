@@ -57,6 +57,7 @@
                 </padding>
                 <Label text="Equipe A" styleClass="titulo-secao"/>
                 <Button text="⚽ Gol" onAction="#onGolA" styleClass="card-button, card-destaque" prefWidth="200"/>
+                <Button text="⚠ Gol Contra" onAction="#onGolContraA" styleClass="card-button" prefWidth="200"/>
                 <Button text="🟨 Cartão Amarelo" onAction="#onAmareloA" styleClass="card-button" prefWidth="200"/>
                 <Button text="🟥 Cartão Vermelho" onAction="#onVermelhoA" styleClass="botao-perigo" prefWidth="200"/>
 
@@ -71,6 +72,7 @@
                 </padding>
                 <Label text="Equipe B" styleClass="titulo-secao"/>
                 <Button text="⚽ Gol" onAction="#onGolB" styleClass="card-button, card-destaque" prefWidth="200"/>
+                <Button text="⚠ Gol Contra" onAction="#onGolContraB" styleClass="card-button" prefWidth="200"/>
                 <Button text="🟨 Cartão Amarelo" onAction="#onAmareloB" styleClass="card-button" prefWidth="200"/>
                 <Button text="🟥 Cartão Vermelho" onAction="#onVermelhoB" styleClass="botao-perigo" prefWidth="200"/>
 

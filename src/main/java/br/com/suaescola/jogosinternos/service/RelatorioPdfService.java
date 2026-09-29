@@ -71,7 +71,12 @@ public class RelatorioPdfService {
             y = desenharTexto(cs, fonteTitulo, 17, margem, y,
                     equipeA.getNome() + "        " + partida.getPlacarA() + " x " + partida.getPlacarB()
                     + "        " + equipeB.getNome());
-            y -= 50;
+            y -= 24;
+            if (partida.getStatus() == br.com.suaescola.jogosinternos.model.StatusPartida.ENCERRADA_WO) {
+                y = desenharTexto(cs, fonteTexto, 12, margem, y, "Resultado decidido por WO (vitória por ausência do adversário).");
+                y -= 26;
+            }
+            y -= 24;
             y = desenharTexto(cs, fonteTexto, 12, margem, y, "Preencha abaixo a súmula oficial da partida:");
             y -= 30;
 
@@ -144,6 +149,7 @@ public class RelatorioPdfService {
 
         String tipoTexto = switch (evento.getTipo()) {
             case GOL -> "Gol";
+            case GOL_CONTRA -> "Gol contra";
             case PONTO -> "Ponto";
             case BLOQUEIO -> "Bloqueio";
             case CARTAO_AMARELO -> "Cartão amarelo";

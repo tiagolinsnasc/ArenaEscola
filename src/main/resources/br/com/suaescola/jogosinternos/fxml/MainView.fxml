@@ -114,13 +114,13 @@
             <padding>
                 <Insets top="6" bottom="6" left="12" right="12"/>
             </padding>
-            <Label text="Jogos Internos v1.1 " styleClass="status-label"/>
+            <Label text="Jogos Internos v1.0 — pronto" styleClass="status-label"/>
         </HBox>
     </bottom>
 
 </BorderPane>
 
-    <ImageView fx:id="logoEscola" fitWidth="200" fitHeight="90" preserveRatio="true"
+    <ImageView fx:id="logoEscola" fitWidth="60" fitHeight="60" preserveRatio="true"
                StackPane.alignment="TOP_RIGHT">
         <StackPane.margin>
             <Insets top="46" right="16"/>

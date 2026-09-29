@@ -61,6 +61,7 @@
                 <Insets top="14" bottom="20" left="20" right="20"/>
             </padding>
             <Button text="Iniciar Partida" onAction="#onIniciarPartida" styleClass="card-button, card-destaque" prefWidth="200" prefHeight="44"/>
+            <Button text="Vitória por WO (sem jogar)" onAction="#onRegistrarWo" styleClass="botao-perigo" prefWidth="220" prefHeight="44"/>
         </HBox>
     </bottom>
 

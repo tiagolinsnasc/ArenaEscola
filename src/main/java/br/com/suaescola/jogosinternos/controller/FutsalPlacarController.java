@@ -305,6 +305,16 @@ public class FutsalPlacarController {
         registrarGol(equipeB, jogadoresB, false);
     }
 
+    @FXML
+    private void onGolContraA() {
+        registrarGolContra(equipeA, jogadoresA, true);
+    }
+
+    @FXML
+    private void onGolContraB() {
+        registrarGolContra(equipeB, jogadoresB, false);
+    }
+
     private void registrarGol(Equipe equipe, List<Jogador> jogadores, boolean equipeAMarcou) {
         Jogador jogador = null;
         if (configuracaoDAO.getBoolean("indicar_autor_gol", true) && !jogadores.isEmpty()) {
@@ -327,6 +337,33 @@ public class FutsalPlacarController {
 
         registrarLog(evento, "⚽ Gol" + (jogador != null ? " de " + jogador.getNome() : "")
                 + " — " + placarA + " x " + placarB, equipeAMarcou);
+    }
+
+    /**
+     * Gol contra: um jogador da equipe que errou é sempre indicado (sem essa
+     * informação, não dá pra saber de quem foi o azar), mas o ponto vai pro
+     * placar da equipe ADVERSÁRIA. O evento fica registrado no log da equipe
+     * que errou (equipeQueErrou), que é onde faz mais sentido revisar depois.
+     */
+    private void registrarGolContra(Equipe equipeQueErrou, List<Jogador> jogadoresQueErrou, boolean equipeAErrou) {
+        Jogador jogador = escolherJogador(jogadoresQueErrou, "Gol contra de qual jogador da " + equipeQueErrou.getNome() + "?");
+        if (jogador == null) {
+            return; // cancelado
+        }
+
+        if (equipeAErrou) {
+            placarB++;
+        } else {
+            placarA++;
+        }
+        atualizarPlacar();
+
+        Equipe equipeBeneficiada = equipeAErrou ? equipeB : equipeA;
+        Evento evento = Evento.novoEvento(partida.getId(), jogador.getId(), equipeBeneficiada.getId(),
+                TipoEvento.GOL_CONTRA, periodoTexto(), tempoDecorridoSegundos());
+        eventoDAO.salvar(evento);
+
+        registrarLog(evento, "⚠ Gol contra de " + jogador.getNome() + " — " + placarA + " x " + placarB, equipeAErrou);
     }
 
     @FXML
@@ -447,7 +484,7 @@ public class FutsalPlacarController {
 
     private void reverterEvento(Evento evento) {
         switch (evento.getTipo()) {
-            case GOL -> {
+            case GOL, GOL_CONTRA -> {
                 if (evento.getEquipeId() == equipeA.getId()) {
                     placarA = Math.max(0, placarA - 1);
                 } else {
