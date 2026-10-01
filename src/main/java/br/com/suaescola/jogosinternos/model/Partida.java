@@ -8,6 +8,11 @@ import java.time.LocalDateTime;
  * a fonte de verdade real são os eventos (tabela evento), mas manter o
  * placar na própria partida evita ter que recalcular a cada consulta de
  * histórico.
+ *
+ * campeonatoId e fase são opcionais (null): uma partida avulsa (fora de
+ * campeonato) não tem nenhum dos dois. Quando pertence a um campeonato,
+ * "fase" identifica a rodada/etapa (ex.: "Pontos Corridos", "Quartas de
+ * Final", "Semifinal", "Final").
  */
 public class Partida {
 
@@ -19,12 +24,15 @@ public class Partida {
     private int placarA;
     private int placarB;
     private StatusPartida status;
+    private Integer campeonatoId;
+    private String fase;
 
     public Partida() {
     }
 
     public Partida(int id, Modalidade modalidade, int equipeAId, int equipeBId,
-                    LocalDateTime dataHora, int placarA, int placarB, StatusPartida status) {
+                    LocalDateTime dataHora, int placarA, int placarB, StatusPartida status,
+                    Integer campeonatoId, String fase) {
         this.id = id;
         this.modalidade = modalidade;
         this.equipeAId = equipeAId;
@@ -33,6 +41,8 @@ public class Partida {
         this.placarA = placarA;
         this.placarB = placarB;
         this.status = status;
+        this.campeonatoId = campeonatoId;
+        this.fase = fase;
     }
 
     public static Partida novaPartida(Modalidade modalidade, int equipeAId, int equipeBId) {
@@ -44,6 +54,14 @@ public class Partida {
         p.placarA = 0;
         p.placarB = 0;
         p.status = StatusPartida.EM_ANDAMENTO;
+        return p;
+    }
+
+    public static Partida novaPartidaDeCampeonato(Modalidade modalidade, int equipeAId, int equipeBId,
+                                                   int campeonatoId, String fase) {
+        Partida p = novaPartida(modalidade, equipeAId, equipeBId);
+        p.campeonatoId = campeonatoId;
+        p.fase = fase;
         return p;
     }
 
@@ -109,5 +127,21 @@ public class Partida {
 
     public void setStatus(StatusPartida status) {
         this.status = status;
+    }
+
+    public Integer getCampeonatoId() {
+        return campeonatoId;
+    }
+
+    public void setCampeonatoId(Integer campeonatoId) {
+        this.campeonatoId = campeonatoId;
+    }
+
+    public String getFase() {
+        return fase;
+    }
+
+    public void setFase(String fase) {
+        this.fase = fase;
     }
 }

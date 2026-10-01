@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +21,8 @@ public class PartidaDAO {
             atualizar(partida);
             return partida;
         }
-        String sql = "INSERT INTO partida (modalidade, equipe_a_id, equipe_b_id, data_hora, placar_a, placar_b, status) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO partida (modalidade, equipe_a_id, equipe_b_id, data_hora, placar_a, placar_b, "
+                + "status, campeonato_id, fase) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -42,12 +43,12 @@ public class PartidaDAO {
     /** Atualiza placar/status -- chamado a cada evento lançado e ao encerrar a partida. */
     public void atualizar(Partida partida) {
         String sql = "UPDATE partida SET modalidade = ?, equipe_a_id = ?, equipe_b_id = ?, data_hora = ?, "
-                + "placar_a = ?, placar_b = ?, status = ? WHERE id = ?";
+                + "placar_a = ?, placar_b = ?, status = ?, campeonato_id = ?, fase = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             preencher(ps, partida);
-            ps.setInt(8, partida.getId());
+            ps.setInt(10, partida.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar partida", e);
@@ -96,6 +97,7 @@ public class PartidaDAO {
         return lista;
     }
 
+    /** Partidas avulsas (fora de campeonato) -- usadas na tela de Nova Partida solta. */
     public List<Partida> listarEmAndamento() {
         String sql = "SELECT * FROM partida WHERE status = 'EM_ANDAMENTO' ORDER BY data_hora DESC";
         List<Partida> lista = new ArrayList<>();
@@ -112,6 +114,25 @@ public class PartidaDAO {
         return lista;
     }
 
+    /** Todas as partidas de um campeonato (todas as fases), em ordem de criação. */
+    public List<Partida> listarPorCampeonato(int campeonatoId) {
+        String sql = "SELECT * FROM partida WHERE campeonato_id = ? ORDER BY id";
+        List<Partida> lista = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, campeonatoId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(mapear(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar partidas do campeonato", e);
+        }
+        return lista;
+    }
+
     private void preencher(PreparedStatement ps, Partida partida) throws SQLException {
         ps.setString(1, partida.getModalidade().name());
         ps.setInt(2, partida.getEquipeAId());
@@ -120,9 +141,18 @@ public class PartidaDAO {
         ps.setInt(5, partida.getPlacarA());
         ps.setInt(6, partida.getPlacarB());
         ps.setString(7, partida.getStatus().name());
+        if (partida.getCampeonatoId() != null) {
+            ps.setInt(8, partida.getCampeonatoId());
+        } else {
+            ps.setNull(8, Types.INTEGER);
+        }
+        ps.setString(9, partida.getFase());
     }
 
     private Partida mapear(ResultSet rs) throws SQLException {
+        int campeonatoId = rs.getInt("campeonato_id");
+        Integer campeonatoIdObj = rs.wasNull() ? null : campeonatoId;
+
         return new Partida(
                 rs.getInt("id"),
                 Modalidade.valueOf(rs.getString("modalidade")),
@@ -131,7 +161,9 @@ public class PartidaDAO {
                 LocalDateTime.parse(rs.getString("data_hora")),
                 rs.getInt("placar_a"),
                 rs.getInt("placar_b"),
-                StatusPartida.valueOf(rs.getString("status"))
+                StatusPartida.valueOf(rs.getString("status")),
+                campeonatoIdObj,
+                rs.getString("fase")
         );
     }
 }

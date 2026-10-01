@@ -50,6 +50,11 @@ public class MainController {
     }
 
     @FXML
+    private void abrirCampeonatos() {
+        abrirJanela("/br/com/suaescola/jogosinternos/fxml/CampeonatosView.fxml", "Campeonatos");
+    }
+
+    @FXML
     private void abrirHistorico() {
         abrirJanela("/br/com/suaescola/jogosinternos/fxml/HistoricoPartidasView.fxml", "Histórico de Partidas");
     }

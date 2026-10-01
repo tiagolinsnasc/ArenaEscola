@@ -45,6 +45,11 @@
                         <MenuItem text="Histórico" onAction="#abrirHistorico"/>
                     </items>
                 </Menu>
+                <Menu text="Campeonatos">
+                    <items>
+                        <MenuItem text="Gerenciar Campeonatos" onAction="#abrirCampeonatos"/>
+                    </items>
+                </Menu>
                 <Menu text="Relatórios">
                     <items>
                         <MenuItem text="Súmulas" onAction="#abrirRelatorios"/>

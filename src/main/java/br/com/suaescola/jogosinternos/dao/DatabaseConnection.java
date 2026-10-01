@@ -75,8 +75,19 @@ public final class DatabaseConnection {
         try (Statement st = conn.createStatement()) {
             for (String comando : sql.split(";")) {
                 String trimmed = comando.trim();
-                if (!trimmed.isEmpty()) {
+                if (trimmed.isEmpty()) {
+                    continue;
+                }
+                try {
                     st.execute(trimmed);
+                } catch (SQLException e) {
+                    // ALTER TABLE ... ADD COLUMN não é idempotente: se o banco já
+                    // tiver sido migrado numa execução anterior, a coluna já existe
+                    // e o SQLite recusa com essa mensagem -- é esperado, não é erro.
+                    String mensagem = e.getMessage() == null ? "" : e.getMessage().toLowerCase();
+                    if (!mensagem.contains("duplicate column")) {
+                        throw e;
+                    }
                 }
             }
         }

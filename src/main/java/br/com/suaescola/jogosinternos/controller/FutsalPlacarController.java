@@ -345,6 +345,12 @@ public class FutsalPlacarController {
      * placar da equipe ADVERSÁRIA. O evento fica registrado no log da equipe
      * que errou (equipeQueErrou), que é onde faz mais sentido revisar depois.
      */
+    /**
+     * Gol contra: um jogador da equipe que errou é sempre indicado (sem essa
+     * informação, não dá pra saber de quem foi o azar), mas o ponto -- e o
+     * registro no log -- vão pro placar e para a coluna da equipe
+     * BENEFICIADA (a que o gol foi atribuído), não da equipe que errou.
+     */
     private void registrarGolContra(Equipe equipeQueErrou, List<Jogador> jogadoresQueErrou, boolean equipeAErrou) {
         Jogador jogador = escolherJogador(jogadoresQueErrou, "Gol contra de qual jogador da " + equipeQueErrou.getNome() + "?");
         if (jogador == null) {
@@ -363,7 +369,8 @@ public class FutsalPlacarController {
                 TipoEvento.GOL_CONTRA, periodoTexto(), tempoDecorridoSegundos());
         eventoDAO.salvar(evento);
 
-        registrarLog(evento, "⚠ Gol contra de " + jogador.getNome() + " — " + placarA + " x " + placarB, equipeAErrou);
+        registrarLog(evento, "⚠ Gol contra de " + jogador.getNome() + " (" + equipeQueErrou.getNome() + ") — "
+                + placarA + " x " + placarB, !equipeAErrou);
     }
 
     @FXML
