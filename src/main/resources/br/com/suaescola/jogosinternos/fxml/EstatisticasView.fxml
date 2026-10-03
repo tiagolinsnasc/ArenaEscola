@@ -55,16 +55,18 @@
                     </columns>
                 </TableView>
             </VBox>
+
+            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                <Label text="Entradas (substituições)" styleClass="titulo-secao"/>
+                <TableView fx:id="tabelaEntradas" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colEntradaJogador" text="Jogador" prefWidth="150"/>
+                        <TableColumn fx:id="colEntradaEquipe" text="Equipe" prefWidth="130"/>
+                        <TableColumn fx:id="colEntradaQuantidade" text="Vezes" prefWidth="60"/>
+                    </columns>
+                </TableView>
+            </VBox>
         </HBox>
     </center>
-
-    <bottom>
-        <Label text="Entradas/saídas (substituições) ainda não são registradas pelo sistema -- não entram nesta tela."
-               styleClass="texto-auxiliar" wrapText="true">
-            <padding>
-                <Insets top="4" bottom="12" left="16" right="16"/>
-            </padding>
-        </Label>
-    </bottom>
 
 </BorderPane>

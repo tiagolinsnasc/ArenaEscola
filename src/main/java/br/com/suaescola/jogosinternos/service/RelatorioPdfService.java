@@ -154,6 +154,8 @@ public class RelatorioPdfService {
             case BLOQUEIO -> "Bloqueio";
             case CARTAO_AMARELO -> "Cartão amarelo";
             case CARTAO_VERMELHO -> "Cartão vermelho";
+            case ENTRADA -> "Entrada";
+            case SAIDA -> "Saída";
         };
 
         String periodo = evento.getPeriodo() != null ? " (" + evento.getPeriodo() + ")" : "";

@@ -393,20 +393,58 @@ public class FutsalPlacarController {
         registrarCartao(equipeB, jogadoresB, TipoEvento.CARTAO_VERMELHO, false);
     }
 
-    private void registrarCartao(Equipe equipe, List<Jogador> jogadores, TipoEvento tipoCartao, boolean ehEquipeA) {
-        Jogador jogador = escolherJogador(jogadores, "Cartão para qual jogador?");
-        if (jogador == null) {
-            return; // cartão sempre precisa de um jogador, para o controle de acúmulo
+    @FXML
+    private void onSubstituicaoA() {
+        registrarSubstituicao(equipeA, jogadoresA, true);
+    }
+
+    @FXML
+    private void onSubstituicaoB() {
+        registrarSubstituicao(equipeB, jogadoresB, false);
+    }
+
+    /** Registra uma substituição como dois eventos (SAIDA + ENTRADA), com um único log representando os dois. */
+    private void registrarSubstituicao(Equipe equipe, List<Jogador> jogadores, boolean ehEquipeA) {
+        Jogador saindo = escolherJogador(jogadores, "Quem está saindo (" + equipe.getNome() + ")?");
+        if (saindo == null) {
+            return;
+        }
+        Jogador entrando = escolherJogador(jogadores, "Quem está entrando (" + equipe.getNome() + ")?");
+        if (entrando == null) {
+            return;
+        }
+        if (saindo.getId() == entrando.getId()) {
+            avisar("Escolha dois jogadores diferentes para a substituição.");
+            return;
         }
 
-        Evento evento = Evento.novoEvento(partida.getId(), jogador.getId(), equipe.getId(),
+        eventoDAO.salvar(Evento.novoEvento(partida.getId(), saindo.getId(), equipe.getId(),
+                TipoEvento.SAIDA, periodoTexto(), tempoDecorridoSegundos()));
+        Evento eventoEntrada = Evento.novoEvento(partida.getId(), entrando.getId(), equipe.getId(),
+                TipoEvento.ENTRADA, periodoTexto(), tempoDecorridoSegundos());
+        eventoDAO.salvar(eventoEntrada);
+
+        registrarLog(eventoEntrada, "🔄 Entra " + entrando.getNome() + ", sai " + saindo.getNome(), ehEquipeA);
+    }
+
+    private void registrarCartao(Equipe equipe, List<Jogador> jogadores, TipoEvento tipoCartao, boolean ehEquipeA) {
+        Jogador jogador = null;
+        if (configuracaoDAO.getBoolean("exigir_jogador_cartao", true)) {
+            jogador = escolherJogador(jogadores, "Cartão para qual jogador?");
+            if (jogador == null) {
+                return; // cancelado
+            }
+        }
+
+        Evento evento = Evento.novoEvento(partida.getId(), jogador != null ? jogador.getId() : null, equipe.getId(),
                 tipoCartao, periodoTexto(), tempoDecorridoSegundos());
         eventoDAO.salvar(evento);
 
         String simbolo = tipoCartao == TipoEvento.CARTAO_AMARELO ? "🟨" : "🟥";
-        registrarLog(evento, simbolo + " " + jogador.getNome(), ehEquipeA);
+        registrarLog(evento, simbolo + (jogador != null ? " " + jogador.getNome() : " (" + equipe.getNome() + ", sem jogador indicado)"), ehEquipeA);
 
-        if (tipoCartao == TipoEvento.CARTAO_AMARELO) {
+        // o controle de acúmulo (2º amarelo = vermelho automático) só é possível quando o jogador é indicado
+        if (tipoCartao == TipoEvento.CARTAO_AMARELO && jogador != null) {
             int quantidade = cartoesAmarelosPorJogador.merge(jogador.getId(), 1, Integer::sum);
             if (quantidade >= 2) {
                 Evento vermelhoAutomatico = Evento.novoEvento(partida.getId(), jogador.getId(), equipe.getId(),

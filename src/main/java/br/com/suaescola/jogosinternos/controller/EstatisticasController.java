@@ -48,6 +48,14 @@ public class EstatisticasController {
     private TableColumn<LinhaCartoes, String> colCartaoAmarelos;
     @FXML
     private TableColumn<LinhaCartoes, String> colCartaoVermelhos;
+    @FXML
+    private TableView<LinhaEntrada> tabelaEntradas;
+    @FXML
+    private TableColumn<LinhaEntrada, String> colEntradaJogador;
+    @FXML
+    private TableColumn<LinhaEntrada, String> colEntradaEquipe;
+    @FXML
+    private TableColumn<LinhaEntrada, String> colEntradaQuantidade;
 
     private final EventoDAO eventoDAO = new EventoDAO();
     private final JogadorDAO jogadorDAO = new JogadorDAO();
@@ -61,6 +69,9 @@ public class EstatisticasController {
     }
 
     private record LinhaCartoes(String jogador, String equipe, int amarelos, int vermelhos) {
+    }
+
+    private record LinhaEntrada(String jogador, String equipe, int quantidade) {
     }
 
     @FXML
@@ -77,6 +88,10 @@ public class EstatisticasController {
         colCartaoEquipe.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().equipe()));
         colCartaoAmarelos.setCellValueFactory(d -> new SimpleStringProperty(String.valueOf(d.getValue().amarelos())));
         colCartaoVermelhos.setCellValueFactory(d -> new SimpleStringProperty(String.valueOf(d.getValue().vermelhos())));
+
+        colEntradaJogador.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().jogador()));
+        colEntradaEquipe.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().equipe()));
+        colEntradaQuantidade.setCellValueFactory(d -> new SimpleStringProperty(String.valueOf(d.getValue().quantidade())));
 
         atualizar();
     }
@@ -95,6 +110,27 @@ public class EstatisticasController {
 
         atualizarPontuadores(filtro, equipesPorId, jogadoresPorId);
         atualizarCartoes(filtro, equipesPorId, jogadoresPorId);
+        atualizarEntradas(filtro, equipesPorId, jogadoresPorId);
+    }
+
+    private void atualizarEntradas(Modalidade filtro, Map<Integer, Equipe> equipesPorId, Map<Integer, Jogador> jogadoresPorId) {
+        Map<Integer, Integer> contagem = new HashMap<>();
+        for (Evento evento : eventoDAO.listarPorTipo(TipoEvento.ENTRADA)) {
+            Jogador jogador = jogadorValido(evento, filtro, equipesPorId, jogadoresPorId);
+            if (jogador != null) {
+                contagem.merge(jogador.getId(), 1, Integer::sum);
+            }
+        }
+
+        List<LinhaEntrada> linhas = new ArrayList<>();
+        for (Map.Entry<Integer, Integer> entrada : contagem.entrySet()) {
+            Jogador jogador = jogadoresPorId.get(entrada.getKey());
+            Equipe equipe = equipesPorId.get(jogador.getEquipeId());
+            linhas.add(new LinhaEntrada(jogador.getNome(), equipe != null ? equipe.getNome() : "-", entrada.getValue()));
+        }
+        linhas.sort(Comparator.comparingInt(LinhaEntrada::quantidade).reversed());
+
+        tabelaEntradas.setItems(FXCollections.observableArrayList(linhas));
     }
 
     private Modalidade modalidadeSelecionada() {

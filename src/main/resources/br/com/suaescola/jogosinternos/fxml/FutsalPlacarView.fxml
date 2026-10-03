@@ -60,6 +60,7 @@
                 <Button text="⚠ Gol Contra" onAction="#onGolContraA" styleClass="card-button" prefWidth="200"/>
                 <Button text="🟨 Cartão Amarelo" onAction="#onAmareloA" styleClass="card-button" prefWidth="200"/>
                 <Button text="🟥 Cartão Vermelho" onAction="#onVermelhoA" styleClass="botao-perigo" prefWidth="200"/>
+                <Button text="🔄 Substituição" onAction="#onSubstituicaoA" styleClass="card-button" prefWidth="200"/>
 
                 <Label text="Eventos" styleClass="texto-auxiliar"/>
                 <ListView fx:id="listaEventosA" VBox.vgrow="ALWAYS"/>
@@ -75,6 +76,7 @@
                 <Button text="⚠ Gol Contra" onAction="#onGolContraB" styleClass="card-button" prefWidth="200"/>
                 <Button text="🟨 Cartão Amarelo" onAction="#onAmareloB" styleClass="card-button" prefWidth="200"/>
                 <Button text="🟥 Cartão Vermelho" onAction="#onVermelhoB" styleClass="botao-perigo" prefWidth="200"/>
+                <Button text="🔄 Substituição" onAction="#onSubstituicaoB" styleClass="card-button" prefWidth="200"/>
 
                 <Label text="Eventos" styleClass="texto-auxiliar"/>
                 <ListView fx:id="listaEventosB" VBox.vgrow="ALWAYS"/>

@@ -5,12 +5,15 @@ package br.com.suaescola.jogosinternos.model;
  * Nem todo tipo se aplica a toda modalidade:
  * - GOL, GOL_CONTRA: futsal
  * - PONTO, BLOQUEIO: vôlei
- * - CARTAO_AMARELO, CARTAO_VERMELHO: ambas
+ * - CARTAO_AMARELO, CARTAO_VERMELHO, ENTRADA, SAIDA: ambas
  *
  * Em GOL_CONTRA, o jogadorId é de quem marcou contra (equipe que errou),
  * mas o equipeId do evento é da equipe BENEFICIADA (que ganha o ponto) --
  * assim o placar geral continua sendo calculado por equipeId, igual aos
  * outros tipos de evento.
+ *
+ * ENTRADA/SAIDA registram uma substituição: sempre em par (quem sai e
+ * quem entra), mesmo equipeId, mesmo periodo/minutoSegundos.
  */
 public enum TipoEvento {
     GOL,
@@ -18,5 +21,7 @@ public enum TipoEvento {
     PONTO,
     BLOQUEIO,
     CARTAO_AMARELO,
-    CARTAO_VERMELHO
+    CARTAO_VERMELHO,
+    ENTRADA,
+    SAIDA
 }

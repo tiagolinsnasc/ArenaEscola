@@ -330,23 +330,62 @@ public class VoleiPlacarController {
         registrarCartao(equipeB, jogadoresB, TipoEvento.CARTAO_VERMELHO, false);
     }
 
-    private void registrarCartao(Equipe equipe, List<Jogador> jogadores, TipoEvento tipoCartao, boolean ehEquipeA) {
-        Jogador jogador = escolherJogador(jogadores, "Cartão para qual jogador?");
-        if (jogador == null) {
+    @FXML
+    private void onSubstituicaoA() {
+        registrarSubstituicao(equipeA, jogadoresA, true);
+    }
+
+    @FXML
+    private void onSubstituicaoB() {
+        registrarSubstituicao(equipeB, jogadoresB, false);
+    }
+
+    /** Registra uma substituição como dois eventos (SAIDA + ENTRADA), com um único log representando os dois. */
+    private void registrarSubstituicao(Equipe equipe, List<Jogador> jogadores, boolean ehEquipeA) {
+        Jogador saindo = escolherJogador(jogadores, "Quem está saindo (" + equipe.getNome() + ")?");
+        if (saindo == null) {
+            return;
+        }
+        Jogador entrando = escolherJogador(jogadores, "Quem está entrando (" + equipe.getNome() + ")?");
+        if (entrando == null) {
+            return;
+        }
+        if (saindo.getId() == entrando.getId()) {
+            avisar("Escolha dois jogadores diferentes para a substituição.");
             return;
         }
 
-        Evento evento = Evento.novoEvento(partida.getId(), jogador.getId(), equipe.getId(),
+        eventoDAO.salvar(Evento.novoEvento(partida.getId(), saindo.getId(), equipe.getId(),
+                TipoEvento.SAIDA, "Set " + numeroSetAtual, segundosDecorridos));
+        Evento eventoEntrada = Evento.novoEvento(partida.getId(), entrando.getId(), equipe.getId(),
+                TipoEvento.ENTRADA, "Set " + numeroSetAtual, segundosDecorridos);
+        eventoDAO.salvar(eventoEntrada);
+
+        registrarLog(eventoEntrada, "🔄 Entra " + entrando.getNome() + ", sai " + saindo.getNome(), ehEquipeA);
+    }
+
+    private void registrarCartao(Equipe equipe, List<Jogador> jogadores, TipoEvento tipoCartao, boolean ehEquipeA) {
+        Jogador jogador = null;
+        if (configuracaoDAO.getBoolean("exigir_jogador_cartao", true)) {
+            jogador = escolherJogador(jogadores, "Cartão para qual jogador?");
+            if (jogador == null) {
+                return; // cancelado
+            }
+        }
+
+        Evento evento = Evento.novoEvento(partida.getId(), jogador != null ? jogador.getId() : null, equipe.getId(),
                 tipoCartao, "Set " + numeroSetAtual, segundosDecorridos);
         eventoDAO.salvar(evento);
 
+        String nomeOuEquipe = jogador != null ? jogador.getNome() : "(" + equipe.getNome() + ", sem jogador indicado)";
+
         if (tipoCartao == TipoEvento.CARTAO_AMARELO) {
-            registrarLog(evento, "🟨 " + jogador.getNome() + " (advertência)", ehEquipeA);
+            registrarLog(evento, "🟨 " + nomeOuEquipe + " (advertência)", ehEquipeA);
             return;
         }
 
         // regra do vôlei: cartão vermelho dá ponto automático para a equipe adversária
-        registrarLog(evento, "🟥 " + jogador.getNome() + " — ponto para o adversário", ehEquipeA);
+        registrarLog(evento, "🟥 " + nomeOuEquipe + " — ponto para o adversário", ehEquipeA);
         somarPonto(!ehEquipeA);
 
         Evento pontoAdversario = Evento.novoEvento(partida.getId(), null,
